@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayLocal.AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .auth-btns {
+            display: flex;
+            gap: 15px;
+        }
+
+        .cta-btn {
+            padding: 16px 32px;
+            font-size: 1.4rem;
+            background-color: #ff4b5c;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background-color: #e0484a;
+            transform: scale(1.05);
+        }
+
+        .cta-btn-outline {
+            padding: 16px 32px;
+            font-size: 1.4rem;
+            background-color: transparent;
+            border: 2px solid #ff4b5c;
+            color: #ff4b5c;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn-outline:hover {
+            background-color: #ff4b5c;
+            color: white;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background-color: #fff;
+            padding: 5rem 2rem;
+        }
+
+        .hero h2 {
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .learn-more {
+            font-size: 2rem;
+            cursor: pointer;
+            margin-top: 2rem;
+            color: #333;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .learn-more svg {
+            margin-left: 10px;
+            fill: #333;
+            width: 30px;
+            height: 30px;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
+            padding: 4rem 0;
+            background-color: #fff;
+        }
+
+        .feature {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3rem;
+            width: 100%;
+        }
+
+        .feature:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature .text {
+            width: 50%;
+            padding: 2rem;
+        }
+
+        .feature .text h3 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature .text p {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .feature .image-placeholder {
+            width: 50%;
+            height: 400px;
+            background-image: url('/images/img1.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+        }
+
+        .feature:nth-child(2) .image-placeholder {
+            background-image: url('/images/img2.jpg');
+        }
+
+        .feature:nth-child(3) .image-placeholder {
+            background-image: url('/images/img3.jpg');
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        footer p {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>PlayLocal.AI</h1>
+        <div class="auth-btns">
+            <button class="cta-btn-outline">Sign Up</button>
+            <button class="cta-btn">Log In</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>Discover Sports & Local Gems</h2>
+        <p>Find pickup games, local courts, and hidden businesses, powered by AI.</p>
+        <button class="cta-btn" onclick="document.getElementById('features').scrollIntoView()">Learn More</button>
+    </section>
+
+    <section id="features" class="features">
+        <div class="feature">
+            <div class="text">
+                <h3>Find Local Games</h3>
+                <p>Discover nearby pickup games and recreational spots for every sport.</p>
+            </div>
+            <div class="image-placeholder"></div>
+        </div>
+        <div class="feature">
+            <div class="text">
+                <h3>Support Small Businesses</h3>
+                <p>Get personalized recommendations for local businesses to explore after your game.</p>
+            </div>
+            <div class="image-placeholder"></div>
+        </div>
+        <div class="feature">
+            <div class="text">
+                <h3>AI-Powered Stories</h3>
+                <p>AI-generated blurbs that make your experience more engaging and personalized.</p>
+            </div>
+            <div class="image-placeholder"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 PlayLocal.AI. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
