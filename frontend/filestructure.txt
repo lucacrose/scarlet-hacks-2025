@@ -1,4 +1,4 @@
-/your-project
+/frontend
 │
 ├── public/
 │   └── images/
@@ -15,5 +15,5 @@
 │
 ├── tailwind.config.js             
 ├── postcss.config.js              
-├── tsconfig.json / jsconfig.json 
+├─jsconfig.json 
 └── package.json
