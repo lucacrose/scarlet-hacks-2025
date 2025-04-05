@@ -1,157 +1,327 @@
 <!DOCTYPE html>
-
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Map</title>
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaflet + MapTiler Clustering</title>
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-        <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        <style>
-            body { margin: 0; padding: 0; }
-            #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
-            .custom-marker {
-                background-color: red;
-                border-radius: 50%;
-                border: 3px solid white;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-                position: relative;
-            }
-        </style>
-    </head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-    <body>
-        <div id="map"></div>
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
 
-        <script>
-            const apiKey = 'gG6E9mDpOezggzNli39V';
-            const map = L.map('map').setView([41.8388, -87.6275], 15);
+    .custom-marker {
+      background-color: #1a73e8;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+  </style>
+</head>
 
-            L.tileLayer(`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${apiKey}`, {
-            attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>',
-            tileSize: 512,
-            zoomOffset: -1,
-            }).addTo(map);
+<body>
+  <div style="position: absolute; bottom: 20px; left: 20px; z-index: 999; background: rgba(255, 255, 255, 0.95); padding: 8px 14px; border-radius: 12px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); display: flex; gap: 12px; align-items: center;">
+    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.95em;">
+      <input type="radio" name="view" value="hybrid" checked style="accent-color: #1a73e8;" /> Hybrid
+    </label>
+    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.95em;">
+      <input type="radio" name="view" value="events" style="accent-color: #1a73e8;" /> Activities
+    </label>
+    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.95em;">
+      <input type="radio" name="view" value="businesses" style="accent-color: #1a73e8;" /> Businesses
+    </label>
+  </div>
 
-            const events = [
-            { lng: -87.6212, lat: 41.8305, name: "Wine Tasting", time: "6:30 PM", going: 132, address: "123 Wine St, Chicago" },
-            { lng: -87.6375, lat: 41.8349, name: "Charity Auction", time: "5:00 PM", going: 67, address: "124 Charity Rd, Chicago" },
-            { lng: -87.6463, lat: 41.8368, name: "Science Expo", time: "2:00 PM", going: 212, address: "45 Science Ln, Chicago" },
-            { lng: -87.6402, lat: 41.8312, name: "Jazz Night", time: "8:00 PM", going: 145, address: "300 Jazz St, Chicago" },
-            { lng: -87.6298, lat: 41.8371, name: "Yoga in the Park", time: "7:30 AM", going: 84, address: "Parkside Dr, Chicago" },
-            { lng: -87.6154, lat: 41.8343, name: "Food Truck Festival", time: "12:00 PM", going: 298, address: "Loop Food Court, Chicago" },
-            { lng: -87.6323, lat: 41.8388, name: "Local Author Meetup", time: "3:00 PM", going: 54, address: "Readers Ln, Chicago" },
-            { lng: -87.6280, lat: 41.8327, name: "Coding Bootcamp", time: "9:00 AM", going: 223, address: "Dev Center, Chicago" },
-            { lng: -87.6351, lat: 41.8422, name: "Photography Walk", time: "2:30 PM", going: 76, address: "Shutter St, Chicago" },
-            { lng: -87.6399, lat: 41.8441, name: "Tech Panel", time: "5:00 PM", going: 110, address: "Innovate Hall, Chicago" },
-            { lng: -87.6178, lat: 41.8404, name: "Live Comedy Show", time: "9:00 PM", going: 201, address: "Laugh Ave, Chicago" },
-            { lng: -87.6217, lat: 41.8363, name: "Art Workshop", time: "10:00 AM", going: 60, address: "Creative Corner, Chicago" },
-            { lng: -87.6234, lat: 41.8292, name: "Finance 101 Talk", time: "4:00 PM", going: 83, address: "Money St, Chicago" },
-            { lng: -87.6277, lat: 41.8285, name: "Pet Adoption Fair", time: "11:00 AM", going: 134, address: "Pet Plaza, Chicago" },
-            { lng: -87.6309, lat: 41.8358, name: "Marathon Expo", time: "8:00 AM", going: 289, address: "Runner's Way, Chicago" },
-            { lng: -87.6121, lat: 41.8365, name: "Hackathon", time: "6:00 PM", going: 142, address: "CodeSpace, Chicago" },
-            { lng: -87.6255, lat: 41.8382, name: "Volunteer Info Session", time: "1:00 PM", going: 73, address: "Giveback Hub, Chicago" },
-            { lng: -87.6262, lat: 41.8419, name: "Sustainability Meetup", time: "2:15 PM", going: 115, address: "Green Center, Chicago" },
-            { lng: -87.6386, lat: 41.8299, name: "Language Exchange", time: "6:30 PM", going: 90, address: "Polyglot Pub, Chicago" },
-            { lng: -87.6150, lat: 41.8321, name: "Student Film Festival", time: "7:00 PM", going: 160, address: "CineHaus, Chicago" },
-            { lng: -87.6412, lat: 41.8379, name: "Startup Pitch Night", time: "5:45 PM", going: 138, address: "Venture Vault, Chicago" },
-            { lng: -87.6431, lat: 41.8392, name: "Board Game Tournament", time: "6:00 PM", going: 124, address: "GameRoom, Chicago" },
-            { lng: -87.6448, lat: 41.8415, name: "Book Swap", time: "3:45 PM", going: 59, address: "Readers Alley, Chicago" },
-            { lng: -87.6460, lat: 41.8433, name: "Public Speaking Workshop", time: "2:00 PM", going: 81, address: "VoiceUp Hall, Chicago" },
-            { lng: -87.6475, lat: 41.8467, name: "Community Garden Tour", time: "10:15 AM", going: 49, address: "Bloom Lane, Chicago" },
-            { lng: -87.6489, lat: 41.8489, name: "Clothing Drive", time: "11:45 AM", going: 68, address: "Wardrobe Walk, Chicago" },
-            { lng: -87.6500, lat: 41.8504, name: "Veterans Day Parade", time: "12:30 PM", going: 350, address: "Honor Blvd, Chicago" },
-            { lng: -87.6515, lat: 41.8522, name: "Park Cleanup", time: "9:00 AM", going: 92, address: "Eco Park, Chicago" },
-            { lng: -87.6530, lat: 41.8540, name: "Meditation Retreat Intro", time: "7:15 AM", going: 105, address: "Calm Center, Chicago" }
-            ];
+  <div id="map"></div>
 
-            const minSize = 10;
-            const maxSize = 40;
-            const scaleSize = (count) => {
-            const base = Math.exp(-1 / 150);
-            return Math.max(minSize, Math.min(maxSize, Math.floor(minSize + 30 * (1 - Math.pow(base, count)))));
-            };
+  <script>
+    const apiKey = 'gG6E9mDpOezggzNli39V';
+    const map = L.map('map').setView([41.8388, -87.6275], 15);
 
-            const markers = L.markerClusterGroup();
+    L.tileLayer(`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${apiKey}`, {
+      attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>',
+      tileSize: 512,
+      zoomOffset: -1,
+    }).addTo(map);
 
-            events.forEach(({ lng, lat, name, time, going, address }) => {
-            const size = scaleSize(going);
-            const el = document.createElement('div');
-            el.className = 'custom-marker';
-            el.style.width = `${size}px`;
-            el.style.height = `${size}px`;
+    const eventCluster = L.markerClusterGroup();
+    const businessCluster = L.markerClusterGroup();
+    const hybridCluster = L.markerClusterGroup();
 
-            
+    const events = [
+      {
+        lng: -87.6212,
+        lat: 41.8305,
+        name: "Basketball @ Columbus Park",
+        time: "6:00 PM",
+        going: 132,
+        address: "Columbus Park, Chicago"
+      },
+      {
+        lng: -87.6375,
+        lat: 41.8349,
+        name: "Evening Soccer Pickup",
+        time: "7:30 PM",
+        going: 88,
+        address: "Douglas Park, Chicago"
+      },
+      {
+        lng: -87.6463,
+        lat: 41.8368,
+        name: "Morning Yoga Circle",
+        time: "8:00 AM",
+        going: 47,
+        address: "Garfield Park Conservatory, Chicago"
+      },
+      {
+        lng: -87.6499,
+        lat: 41.8481,
+        name: "Open Volleyball Match",
+        time: "5:00 PM",
+        going: 59,
+        address: "Union Park Courts, Chicago"
+      },
+      {
+        lng: -87.6582,
+        lat: 41.8273,
+        name: "Community Run Club",
+        time: "6:30 AM",
+        going: 102,
+        address: "Humboldt Trail Start, Chicago"
+      },
+      {
+        lng: -87.6124,
+        lat: 41.8490,
+        name: "Chess in the Park",
+        time: "3:00 PM",
+        going: 28,
+        address: "Washington Park Pavilion, Chicago"
+      },
+      {
+        lng: -87.6206,
+        lat: 41.8211,
+        name: "Saturday Soccer Showdown",
+        time: "2:00 PM",
+        going: 150,
+        address: "West Side Rec Field, Chicago"
+      },
+      {
+        lng: -87.6304,
+        lat: 41.8229,
+        name: "Street Hockey Blast",
+        time: "4:30 PM",
+        going: 70,
+        address: "Near South Lot, Chicago"
+      },
+      {
+        lng: -87.6677,
+        lat: 41.8263,
+        name: "Pickup Softball Game",
+        time: "5:15 PM",
+        going: 35,
+        address: "Horner Park Diamond 2, Chicago"
+      },
+      {
+        lng: -87.6333,
+        lat: 41.8351,
+        name: "Skate & Chill Jam",
+        time: "7:00 PM",
+        going: 90,
+        address: "West Loop Skate Spot, Chicago"
+      }
+    ];
 
-            const marker = L.marker([lat, lng], {
-                icon: L.divIcon({
-                html: el,
-                className: '',
-                iconSize: [size, size],
-                iconAnchor: [size / 2, size / 2],
-                popupAnchor: [0, -size / 2]
-                })
-            });
+    const businesses = [
+      {
+        lng: -87.6218,
+        lat: 41.8315,
+        name: "Mali Mart",
+        type: "Grocery Store",
+        address: "Columbus Park, Chicago",
+        blurb: "Grab authentic jollof ingredients at Mali Mart, a local favorite bringing a taste of West Africa to Austin."
+      },
+      {
+        lng: -87.6370,
+        lat: 41.8358,
+        name: "Hoop Gear",
+        type: "Sports Shop",
+        address: "123 Courtside Ln, Chicago",
+        blurb: "Your one-stop-shop for pickup game gear and fresh local jerseys."
+      },
+      {
+        lng: -87.6285,
+        lat: 41.8321,
+        name: "Smoothie Power",
+        type: "Juice Bar",
+        address: "Wellness Ave, Chicago",
+        blurb: "Recharge post-game with their house favorite: mango-lime blast."
+      },
+      {
+        lng: -87.6400,
+        lat: 41.8295,
+        name: "Ball & Bean",
+        type: "Coffee Shop",
+        address: "Dribble Dr, Chicago",
+        blurb: "A chill space for hoopers to cool down and grab a fresh roast."
+      },
+      {
+        lng: -87.6352,
+        lat: 41.8331,
+        name: "Urban Stretch Studio",
+        type: "Wellness Studio",
+        address: "Flex Ave, Chicago",
+        blurb: "Loosen up after a match with guided stretch sessions designed for athletes."
+      },
+      {
+        lng: -87.6189,
+        lat: 41.8364,
+        name: "CourtSide Cuts",
+        type: "Barbershop",
+        address: "Fade Street, Chicago",
+        blurb: "Get a clean cut and catch up on local sports with the crew."
+      },
+      {
+        lng: -87.6244,
+        lat: 41.8299,
+        name: "Taco Truck 312",
+        type: "Food Truck",
+        address: "Street Eats Plaza, Chicago",
+        blurb: "Late night pickup? Grab sizzling carnitas and tangy street corn right outside the park."
+      },
+      {
+        lng: -87.6430,
+        lat: 41.8377,
+        name: "Hoops & Hardware",
+        type: "Sport Repair Shop",
+        address: "FixIt Ln, Chicago",
+        blurb: "Need a net, patch, or shoe fix before game time? They’ve got you."
+      },
+      {
+        lng: -87.6306,
+        lat: 41.8316,
+        name: "Rise Cafe",
+        type: "Cafe",
+        address: "Sunrise Blvd, Chicago",
+        blurb: "Start your pickup morning with espresso and banana bread."
+      }
+    ];
 
-            const hasImage = Math.random() > 0.4;
-            const imageTag = hasImage
-                ? `<img src='https://placehold.co/260x180?text=${encodeURIComponent(name)}' style='width: 100%; height: auto; object-fit: cover; border-radius: 6px;' alt='Event Image' />`
-                : '';
+    businesses.forEach(({ lng, lat, name, type, address, blurb }) => {
+      const icon = L.divIcon({
+        className: '',
+        html: `<div style='background: #F4B400; border-radius: 50%; width: 20px; height: 20px; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);'></div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+      });
 
-            const friendLine = `${going} people marked as going`;
+      const marker = L.marker([lat, lng], { icon });
 
-            marker.bindPopup(`
-                <div style="width: 260px; font-family: Arial, sans-serif;">
-                ${imageTag}
-                <div style="padding-top: 10px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <strong style="font-size: 1.2em;">${name}</strong>
-                    <button style="background: none; border: none; cursor: pointer;" title="Save Event">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828970.png" width="20" height="20" alt="Save" onclick="
-                        this.src = this.src.includes('1828970') 
-                            ? 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' 
-                            : 'https://cdn-icons-png.flaticon.com/512/1828/1828970.png'; 
-                        this.style.transform = 'scale(1.2)';
-                        setTimeout(() => this.style.transform = 'scale(1)', 150);
-                        " style="cursor: pointer; transition: transform 0.15s ease;"/>
-                    </button>
-                    </div>
-                    <div style="color: gray; font-size: 0.9em; margin-top: 4px;">Starts ${time}</div>
-                    <div style="color: gray; font-size: 0.9em;">${friendLine}</div>
-                    <div style="color: gray; font-size: 0.9em; margin-bottom: 8px;">${address}</div>
-                    <button onclick="
-                    this.classList.toggle('going'); 
-                    this.textContent = this.classList.contains('going') ? 'Going' : 'Mark as Going'; 
-                    if (this.classList.contains('going')) {
-                        this.style.backgroundColor = '#1A73E8';
-                        this.style.border = '2px solid #1A73E8';
-                        this.style.color = 'white';
-                    } else {
-                        this.style.backgroundColor = 'transparent';
-                        this.style.border = '2px solid #1A73E8';
-                        this.style.color = '#1A73E8';
-                    }
-                    this.style.transform = 'scale(1.05)';
-                    setTimeout(() => this.style.transform = 'scale(1)', 150);
-                    " 
-                    style="width: 100%; padding: 12px; background-color: transparent; color: #1A73E8; border: 2px solid #1A73E8; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1em; transition: all 0.2s ease;">
-                    Mark as Going
-                    </button>
-                </div>
-                </div>
-            `);
+      marker.bindPopup(`
+        <div style="width: 240px; font-family: Arial, sans-serif;">
+          <strong style="font-size: 1.1em;">${name}</strong>
+          <div style="color: #555; font-size: 0.9em;">${type}</div>
+          <div style="color: gray; font-size: 0.85em; margin: 6px 0;">${address}</div>
+          <div style="font-size: 0.9em; color: #333;">${blurb}</div>
+        </div>
+      `);
 
-            markers.addLayer(marker);
-            });
+      businessCluster.addLayer(marker);
+      hybridCluster.addLayer(marker);
+    });
 
-            map.addLayer(markers);
-        </script>
-    </body>
+    const minSize = 10;
+    const maxSize = 40;
+
+    const scaleSize = (count) => {
+      const base = Math.exp(-1 / 150);
+      return Math.max(minSize, Math.min(maxSize, Math.floor(minSize + 30 * (1 - Math.pow(base, count)))));
+    };
+
+    events.forEach(({ lng, lat, name, time, going, address }) => {
+      const size = scaleSize(going);
+      const el = document.createElement('div');
+      el.className = 'custom-marker';
+      el.style.width = `${size}px`;
+      el.style.height = `${size}px`;
+
+      const marker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          html: el,
+          className: '',
+          iconSize: [size, size],
+          iconAnchor: [size / 2, size / 2],
+          popupAnchor: [0, -size / 2]
+        })
+      });
+
+      const hasImage = Math.random() > 0.4;
+      const imageTag = hasImage ? `<img src='https://placehold.co/260x180?text=${encodeURIComponent(name)}' style='width: 100%; height: auto; object-fit: cover; border-radius: 6px;' alt='Event Image' />` : '';
+      const friendLine = `${going} people marked as going`;
+
+      marker.bindPopup(`
+        <div style="width: 260px; font-family: Arial, sans-serif;">
+          ${imageTag}
+          <div style="padding-top: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <strong style="font-size: 1.2em;">${name}</strong>
+              <button style="background: none; border: none; cursor: pointer;" title="Save Event">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828970.png" width="20" height="20" alt="Save" onclick="this.src = this.src.includes('1828970') ? 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' : 'https://cdn-icons-png.flaticon.com/512/1828/1828970.png'; this.style.transform = 'scale(1.2)'; setTimeout(() => this.style.transform = 'scale(1)', 150);" style="cursor: pointer; transition: transform 0.15s ease;" />
+              </button>
+            </div>
+            <div style="color: gray; font-size: 0.9em; margin-top: 4px;">Starts ${time}</div>
+            <div style="color: gray; font-size: 0.9em;">${friendLine}</div>
+            <div style="color: gray; font-size: 0.9em; margin-bottom: 8px;">${address}</div>
+            <button onclick="this.classList.toggle('going'); this.textContent = this.classList.contains('going') ? 'Going' : 'Mark as Going'; if (this.classList.contains('going')) { this.style.backgroundColor = '#1A73E8'; this.style.border = '2px solid #1A73E8'; this.style.color = 'white'; } else { this.style.backgroundColor = 'transparent'; this.style.border = '2px solid #1A73E8'; this.style.color = '#1A73E8'; } this.style.transform = 'scale(1.05)'; setTimeout(() => this.style.transform = 'scale(1)', 150);" style="width: 100%; padding: 12px; background-color: transparent; color: #1A73E8; border: 2px solid #1A73E8; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1em; transition: all 0.2s ease;">Mark as Going</button>
+          </div>
+        </div>
+      `);
+
+      eventCluster.addLayer(marker);
+      hybridCluster.addLayer(marker);
+    });
+
+    const eventLayer = L.layerGroup([eventCluster]);
+    const businessLayer = L.layerGroup([businessCluster]);
+    const hybridLayer = L.layerGroup([hybridCluster]);
+
+    map.addLayer(hybridLayer);
+
+    function setViewMode(mode) {
+      map.removeLayer(eventLayer);
+      map.removeLayer(businessLayer);
+      map.removeLayer(hybridLayer);
+
+      if (mode === 'events') {
+        map.addLayer(eventLayer);
+      } else if (mode === 'businesses') {
+        map.addLayer(businessLayer);
+      } else {
+        map.addLayer(hybridLayer);
+      }
+    }
+
+    document.querySelectorAll('input[name="view"]').forEach(radio => {
+      radio.addEventListener('change', e => setViewMode(e.target.value));
+    });
+  </script>
+</body>
+
 </html>
