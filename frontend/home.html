@@ -139,6 +139,9 @@
             align-items: center;
             padding: 3rem;
             width: 100%;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.5s ease;
         }
 
         .feature:nth-child(even) {
@@ -165,18 +168,21 @@
         .feature .image-placeholder {
             width: 50%;
             height: 400px;
-            background-image: url('/images/img1.jpg');
             background-size: cover;
             background-position: center;
             border-radius: 8px;
         }
 
+        .feature:nth-child(1) .image-placeholder {
+            background-image: url('images/img1.jpg');
+        }
+
         .feature:nth-child(2) .image-placeholder {
-            background-image: url('/images/img2.jpg');
+            background-image: url('images/img2.jpg');
         }
 
         .feature:nth-child(3) .image-placeholder {
-            background-image: url('/images/img3.jpg');
+            background-image: url('images/img3.jpg');
         }
 
         footer {
@@ -235,6 +241,23 @@
     <footer>
         <p>&copy; 2025 PlayLocal.AI. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Check if the elements are in the viewport and trigger the animation
+        const features = document.querySelectorAll('.feature');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.5 });
+
+        features.forEach(feature => {
+            observer.observe(feature);
+        });
+    </script>
 
 </body>
 
