@@ -1,0 +1,19 @@
+/frontend
+│
+├── public/
+│   └── images/
+│       ├── profile.jpg
+│       └── friend.jpg
+│
+├── src/
+│   ├── components/
+│   │   └── ui/
+│   │       └── card.tsx          
+│   ├── pages/
+│   │   └── index.tsx             
+│   └── PlayLocalMapUI.tsx         
+│
+├── tailwind.config.js             
+├── postcss.config.js              
+├─jsconfig.json 
+└── package.json
