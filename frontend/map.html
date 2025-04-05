@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Map</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+        <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+        <style>
+            body { margin: 0; padding: 0; }
+            #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+            .custom-marker {
+                background-color: red;
+                border-radius: 50%;
+                border: 3px solid white;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+                position: relative;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="map"></div>
+
+        <script>
+            const apiKey = 'gG6E9mDpOezggzNli39V';
+            const map = L.map('map').setView([41.8388, -87.6275], 15);
+
+            L.tileLayer(`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${apiKey}`, {
+            attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>',
+            tileSize: 512,
+            zoomOffset: -1,
+            }).addTo(map);
+
+            const events = [
+            { lng: -87.6212, lat: 41.8305, name: "Wine Tasting", time: "6:30 PM", going: 132, address: "123 Wine St, Chicago" },
+            { lng: -87.6375, lat: 41.8349, name: "Charity Auction", time: "5:00 PM", going: 67, address: "124 Charity Rd, Chicago" },
+            { lng: -87.6463, lat: 41.8368, name: "Science Expo", time: "2:00 PM", going: 212, address: "45 Science Ln, Chicago" },
+            { lng: -87.6402, lat: 41.8312, name: "Jazz Night", time: "8:00 PM", going: 145, address: "300 Jazz St, Chicago" },
+            { lng: -87.6298, lat: 41.8371, name: "Yoga in the Park", time: "7:30 AM", going: 84, address: "Parkside Dr, Chicago" },
+            { lng: -87.6154, lat: 41.8343, name: "Food Truck Festival", time: "12:00 PM", going: 298, address: "Loop Food Court, Chicago" },
+            { lng: -87.6323, lat: 41.8388, name: "Local Author Meetup", time: "3:00 PM", going: 54, address: "Readers Ln, Chicago" },
+            { lng: -87.6280, lat: 41.8327, name: "Coding Bootcamp", time: "9:00 AM", going: 223, address: "Dev Center, Chicago" },
+            { lng: -87.6351, lat: 41.8422, name: "Photography Walk", time: "2:30 PM", going: 76, address: "Shutter St, Chicago" },
+            { lng: -87.6399, lat: 41.8441, name: "Tech Panel", time: "5:00 PM", going: 110, address: "Innovate Hall, Chicago" },
+            { lng: -87.6178, lat: 41.8404, name: "Live Comedy Show", time: "9:00 PM", going: 201, address: "Laugh Ave, Chicago" },
+            { lng: -87.6217, lat: 41.8363, name: "Art Workshop", time: "10:00 AM", going: 60, address: "Creative Corner, Chicago" },
+            { lng: -87.6234, lat: 41.8292, name: "Finance 101 Talk", time: "4:00 PM", going: 83, address: "Money St, Chicago" },
+            { lng: -87.6277, lat: 41.8285, name: "Pet Adoption Fair", time: "11:00 AM", going: 134, address: "Pet Plaza, Chicago" },
+            { lng: -87.6309, lat: 41.8358, name: "Marathon Expo", time: "8:00 AM", going: 289, address: "Runner's Way, Chicago" },
+            { lng: -87.6121, lat: 41.8365, name: "Hackathon", time: "6:00 PM", going: 142, address: "CodeSpace, Chicago" },
+            { lng: -87.6255, lat: 41.8382, name: "Volunteer Info Session", time: "1:00 PM", going: 73, address: "Giveback Hub, Chicago" },
+            { lng: -87.6262, lat: 41.8419, name: "Sustainability Meetup", time: "2:15 PM", going: 115, address: "Green Center, Chicago" },
+            { lng: -87.6386, lat: 41.8299, name: "Language Exchange", time: "6:30 PM", going: 90, address: "Polyglot Pub, Chicago" },
+            { lng: -87.6150, lat: 41.8321, name: "Student Film Festival", time: "7:00 PM", going: 160, address: "CineHaus, Chicago" },
+            { lng: -87.6412, lat: 41.8379, name: "Startup Pitch Night", time: "5:45 PM", going: 138, address: "Venture Vault, Chicago" },
+            { lng: -87.6431, lat: 41.8392, name: "Board Game Tournament", time: "6:00 PM", going: 124, address: "GameRoom, Chicago" },
+            { lng: -87.6448, lat: 41.8415, name: "Book Swap", time: "3:45 PM", going: 59, address: "Readers Alley, Chicago" },
+            { lng: -87.6460, lat: 41.8433, name: "Public Speaking Workshop", time: "2:00 PM", going: 81, address: "VoiceUp Hall, Chicago" },
+            { lng: -87.6475, lat: 41.8467, name: "Community Garden Tour", time: "10:15 AM", going: 49, address: "Bloom Lane, Chicago" },
+            { lng: -87.6489, lat: 41.8489, name: "Clothing Drive", time: "11:45 AM", going: 68, address: "Wardrobe Walk, Chicago" },
+            { lng: -87.6500, lat: 41.8504, name: "Veterans Day Parade", time: "12:30 PM", going: 350, address: "Honor Blvd, Chicago" },
+            { lng: -87.6515, lat: 41.8522, name: "Park Cleanup", time: "9:00 AM", going: 92, address: "Eco Park, Chicago" },
+            { lng: -87.6530, lat: 41.8540, name: "Meditation Retreat Intro", time: "7:15 AM", going: 105, address: "Calm Center, Chicago" }
+            ];
+
+            const minSize = 10;
+            const maxSize = 40;
+            const scaleSize = (count) => {
+            const base = Math.exp(-1 / 150);
+            return Math.max(minSize, Math.min(maxSize, Math.floor(minSize + 30 * (1 - Math.pow(base, count)))));
+            };
+
+            const markers = L.markerClusterGroup();
+
+            events.forEach(({ lng, lat, name, time, going, address }) => {
+            const size = scaleSize(going);
+            const el = document.createElement('div');
+            el.className = 'custom-marker';
+            el.style.width = `${size}px`;
+            el.style.height = `${size}px`;
+
+            
+
+            const marker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                html: el,
+                className: '',
+                iconSize: [size, size],
+                iconAnchor: [size / 2, size / 2],
+                popupAnchor: [0, -size / 2]
+                })
+            });
+
+            const hasImage = Math.random() > 0.4;
+            const imageTag = hasImage
+                ? `<img src='https://placehold.co/260x180?text=${encodeURIComponent(name)}' style='width: 100%; height: auto; object-fit: cover; border-radius: 6px;' alt='Event Image' />`
+                : '';
+
+            const friendLine = `${going} people marked as going`;
+
+            marker.bindPopup(`
+                <div style="width: 260px; font-family: Arial, sans-serif;">
+                ${imageTag}
+                <div style="padding-top: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <strong style="font-size: 1.2em;">${name}</strong>
+                    <button style="background: none; border: none; cursor: pointer;" title="Save Event">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828970.png" width="20" height="20" alt="Save" onclick="
+                        this.src = this.src.includes('1828970') 
+                            ? 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' 
+                            : 'https://cdn-icons-png.flaticon.com/512/1828/1828970.png'; 
+                        this.style.transform = 'scale(1.2)';
+                        setTimeout(() => this.style.transform = 'scale(1)', 150);
+                        " style="cursor: pointer; transition: transform 0.15s ease;"/>
+                    </button>
+                    </div>
+                    <div style="color: gray; font-size: 0.9em; margin-top: 4px;">Starts ${time}</div>
+                    <div style="color: gray; font-size: 0.9em;">${friendLine}</div>
+                    <div style="color: gray; font-size: 0.9em; margin-bottom: 8px;">${address}</div>
+                    <button onclick="
+                    this.classList.toggle('going'); 
+                    this.textContent = this.classList.contains('going') ? 'Going' : 'Mark as Going'; 
+                    if (this.classList.contains('going')) {
+                        this.style.backgroundColor = '#1A73E8';
+                        this.style.border = '2px solid #1A73E8';
+                        this.style.color = 'white';
+                    } else {
+                        this.style.backgroundColor = 'transparent';
+                        this.style.border = '2px solid #1A73E8';
+                        this.style.color = '#1A73E8';
+                    }
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => this.style.transform = 'scale(1)', 150);
+                    " 
+                    style="width: 100%; padding: 12px; background-color: transparent; color: #1A73E8; border: 2px solid #1A73E8; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1em; transition: all 0.2s ease;">
+                    Mark as Going
+                    </button>
+                </div>
+                </div>
+            `);
+
+            markers.addLayer(marker);
+            });
+
+            map.addLayer(markers);
+        </script>
+    </body>
+</html>
